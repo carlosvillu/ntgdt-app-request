@@ -5,9 +5,9 @@
   "license": "",
   "scripts": {
     "build": "remix build",
-    "dev": "GOOGLE_APPLICATION_CREDENTIALS=./app/serviceAccountKey.json remix dev",
+    "dev": "GOOGLE_APPLICATION_CREDENTIALS=./app/serviceAccountKey.secret.json remix dev",
     "postinstall": "remix setup node",
-    "start": "GOOGLE_APPLICATION_CREDENTIALS=./app/serviceAccountKey.json remix-serve build"
+    "start": "GOOGLE_APPLICATION_CREDENTIALS=./app/serviceAccountKey.secret.json remix-serve build"
   },
   "dependencies": {
     "@remix-run/react": "^1.1.3",
