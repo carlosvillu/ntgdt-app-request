@@ -1,16 +1,27 @@
-import { useLoaderData, useLocation, useNavigate } from 'remix'
 import type { LoaderFunction } from 'remix'
+
+import { useLoaderData, useLocation, useNavigate } from 'remix'
+import invariant from 'tiny-invariant'
+
 import { db } from '~/firebase-service.server'
-import memeStyles from '~/styles/meme.css'
 
 export let loader: LoaderFunction = async ({ params }) => {
+  invariant(params.id, 'ID undefined')
   const snapshot = await db.ref(`/entries/${params.id}`).once('value')
 
   return snapshot.val()
 }
 
-export function links() {
-  return [{ rel: 'stylesheet', href: memeStyles }]
+
+interface Meme {
+  id: string;
+  image: string;
+}
+
+interface State {
+  current?: number;
+  memes?: Meme[];
+  internal?: boolean
 }
 
 export default function Index() {
@@ -18,21 +29,19 @@ export default function Index() {
   const location = useLocation()
   const meme = useLoaderData<{ id: string; image: string }>()
 
-  const memes = location.state?.memes
-  const currentMemeId = location.state?.current
-  const nextMeme = memes && memes[currentMemeId + 1]
-  const isInternal = location.state?.internal
-
-  console.log(memes, currentMemeId, nextMeme, memes?.length)
-
-  const onGoBack = () => {
-    // TO restore the scroll on previous page if is internal
-    isInternal ? navigate(-1) : navigate('../')
-  }
+  const state = location.state as State
+  const memes = state?.memes
+  const currentMemeId = state.current
+  const nextMeme = (memes && currentMemeId) && memes[currentMemeId + 1]
+  const isInternal = state.internal
+  const onGoBack = () => isInternal ? navigate(-1) : navigate('../')
+  
 
   const onGoFoward = () => {
+    if(!nextMeme || ! state.current) return navigate('../')
+
     navigate(`../${nextMeme.id}`, {
-      state: { ...location.state, current: location.state?.current + 1 },
+      state: { state, current: state.current + 1 },
       replace: true,
     })
   }
