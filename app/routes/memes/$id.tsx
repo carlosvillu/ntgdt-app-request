@@ -1,7 +1,7 @@
 import { useLoaderData, useLocation, useNavigate } from 'remix'
 import type { LoaderFunction } from 'remix'
 import { db } from '~/firebase-service.server'
-import memeStyles from '~/styles/meme.css'
+import styles from '~/styles/meme.css'
 
 export let loader: LoaderFunction = async ({ params }) => {
   const snapshot = await db.ref(`/entries/${params.id}`).once('value')
@@ -10,7 +10,7 @@ export let loader: LoaderFunction = async ({ params }) => {
 }
 
 export function links() {
-  return [{ rel: 'stylesheet', href: memeStyles }]
+  return [{ rel: 'stylesheet', href: styles }]
 }
 
 export default function Index() {
@@ -38,14 +38,16 @@ export default function Index() {
   }
 
   return (
-    <div className="meme">
-      <div className="navigation">
+    <main className="meme">
+      <header>
         <button onClick={onGoBack}>
           {isInternal ? 'Return to memes' : 'Home'}
         </button>
         {nextMeme && <button onClick={onGoFoward}>Foward</button>}
+      </header>
+      <div className="memeImg">
+        <img key={meme.id} src={meme.image} />
       </div>
-      <img key={meme.id} src={meme.image} />
-    </div>
+    </main>
   )
 }
