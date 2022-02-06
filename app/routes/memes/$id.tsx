@@ -3,6 +3,7 @@ import { useLoaderData, useLocation, useNavigate } from 'remix'
 import invariant from 'tiny-invariant'
 
 import { db } from '~/firebase-service.server'
+import styles from '~/styles/meme.css'
 
 export const loader: LoaderFunction = async ({ params }) => {
   invariant(params.id, 'ID undefined')
@@ -20,6 +21,10 @@ interface State {
   current?: number
   memes?: Meme[]
   internal?: boolean
+}
+
+export function links() {
+  return [{ rel: 'stylesheet', href: styles }]
 }
 
 export function Index() {
@@ -46,12 +51,14 @@ export function Index() {
   }
 
   return (
-    <div className="meme">
-      <div className="navigation">
+    <main className="meme">
+      <header>
         <button onClick={onGoBack}>{isInternal ? 'Return to memes' : 'Home'}</button>
         {nextMeme && <button onClick={onGoFoward}>Foward</button>}
+      </header>
+      <div className="memeImg">
+        <img key={meme.id} src={meme.image} />
       </div>
-      <img key={meme.id} src={meme.image} />
-    </div>
+    </main>
   )
 }

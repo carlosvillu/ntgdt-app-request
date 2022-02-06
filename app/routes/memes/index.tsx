@@ -17,14 +17,21 @@ export default function Index() {
   return (
     <>
       <MainHeader />
-      {memes.map((meme, index) => {
-        return (
-          <Link to={meme.id} state={{ internal: true, memes, current: index }} key={meme.id}>
-            <img src={meme.image} />
-            <hr />
-          </Link>
-        )
-      })}
+
+      <main>
+        {memes.map((meme, index) => {
+          return (
+            <Link
+              to={meme.id}
+              state={{ internal: true, memes, current: index }}
+              key={meme.id}
+              className="meme-item"
+            >
+              <img src={meme.image} />
+            </Link>
+          )
+        })}
+      </main>
     </>
   )
 }

@@ -1,4 +1,9 @@
 import { Outlet } from 'remix'
+import styles from '~/styles/memes.css'
+
+export function links() {
+  return [{ rel: 'stylesheet', href: styles }]
+}
 
 import memeStyles from '~/styles/meme.css'
 
@@ -8,8 +13,8 @@ export function links() {
 
 export default function Index() {
   return (
-    <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.4' }}>
+    <section className="page">
       <Outlet />
-    </div>
+    </section>
   )
 }
