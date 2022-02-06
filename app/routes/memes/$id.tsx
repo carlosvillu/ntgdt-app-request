@@ -2,25 +2,36 @@ import type { LoaderFunction } from 'remix'
 import { useLoaderData, useLocation, useNavigate } from 'remix'
 import invariant from 'tiny-invariant'
 
+import { MainHeader } from '~/components/Header'
 import { db } from '~/firebase-service.server'
 import styles from '~/styles/meme.css'
-
-export const loader: LoaderFunction = async ({ params }) => {
-  invariant(params.id, 'ID undefined')
-  const snapshot = await db.ref(`/entries/${params.id}`).once('value')
-
-  return snapshot.val()
-}
 
 interface Meme {
   id: string
   image: string
 }
 
+interface Data {
+  currentMeme: Meme
+  relatedMemes: Record<string, { id: string; image: string }>
+}
+
 interface State {
   current?: number
   memes?: Meme[]
   internal?: boolean
+}
+
+export const loader: LoaderFunction = async ({ params }) => {
+  invariant(params.id, 'ID undefined')
+  const currentMeme = await db.ref(`/entries/${params.id}`).once('value')
+  // TODO: get related memes, maybe using same meme provider
+  const relatedMemes = await db.ref('/entries').limitToLast(10).once('value')
+
+  return {
+    currentMeme: currentMeme.val(),
+    relatedMemes: relatedMemes.val()
+  }
 }
 
 export function links() {
@@ -30,37 +41,32 @@ export function links() {
 export default function Index() {
   const navigate = useNavigate()
   const location = useLocation()
-  const meme = useLoaderData<Meme>()
+  const data = useLoaderData<Data>()
+  const { currentMeme, relatedMemes } = data
 
   const state = location.state as State | undefined
-  const memes = state?.memes
-  const currentMemeId = state?.current
-  const nextMeme = memes && currentMemeId !== undefined && memes[currentMemeId + 1]
   const isInternal = state?.internal
 
   const onGoBack = () => {
     return isInternal ? navigate(-1) : navigate('../')
   }
 
-  const onGoFoward = () => {
-    if (!nextMeme || !state.current) return navigate('../')
-
-    navigate(`../${nextMeme.id}`, {
-      state: { ...state, current: state.current + 1 },
-      replace: true
-    })
-  }
-
   return (
     <>
-      <header>
-        <button onClick={onGoBack}>{isInternal ? 'Return to memes' : 'Home'}</button>
-        {nextMeme && <button onClick={onGoFoward}>Foward</button>}
-      </header>
-      <main className="meme">
-        <div className="memeImg">
-          <img key={meme.id} src={meme.image} />
+      <MainHeader onGoBack={onGoBack} />
+
+      <main>
+        <div className="meme-item">
+          <img key={currentMeme.id} src={currentMeme.image} />
         </div>
+
+        {Object.values(relatedMemes).map((meme) => {
+          return (
+            <div key={meme.id} className="meme-item">
+              <img src={meme.image} />
+            </div>
+          )
+        })}
       </main>
     </>
   )

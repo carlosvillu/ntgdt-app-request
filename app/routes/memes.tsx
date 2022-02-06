@@ -1,9 +1,13 @@
 import { Outlet } from 'remix'
 
+import headerStyles from '~/styles/Header.css'
 import styles from '~/styles/memes.css'
 
 export function links() {
-  return [{ rel: 'stylesheet', href: styles }]
+  return [
+    { rel: 'stylesheet', href: styles },
+    { rel: 'stylesheet', href: headerStyles }
+  ]
 }
 
 export default function Index() {

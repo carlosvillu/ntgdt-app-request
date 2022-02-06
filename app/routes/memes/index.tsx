@@ -19,14 +19,9 @@ export default function Index() {
       <MainHeader />
 
       <main>
-        {memes.map((meme, index) => {
+        {memes.map((meme) => {
           return (
-            <Link
-              to={meme.id}
-              state={{ internal: true, memes, current: index }}
-              key={meme.id}
-              className="meme-item"
-            >
+            <Link to={meme.id} state={{ internal: true }} key={meme.id} className="meme-item">
               <img src={meme.image} />
             </Link>
           )

@@ -3,10 +3,6 @@
   flex-direction: column;
 }
 
-.meme header {
-  justify-content: space-between;
-}
-
 .meme img {
   width: 100%;
   height: auto;
