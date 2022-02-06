@@ -27,7 +27,7 @@ export function links() {
   return [{ rel: 'stylesheet', href: styles }]
 }
 
-export function Index() {
+export default function Index() {
   const navigate = useNavigate()
   const location = useLocation()
   const meme = useLoaderData<Meme>()
