@@ -1,10 +1,12 @@
-import { Link, useLoaderData } from 'remix'
 import type { LoaderFunction } from 'remix'
-import { db } from '~/firebase-service.server'
-import { MainHeader } from '~/components/Header'
+import { Link, useLoaderData } from 'remix'
 
-export let loader: LoaderFunction = async () => {
+import { MainHeader } from '~/components/Header'
+import { db } from '~/firebase-service.server'
+
+export const loader: LoaderFunction = async () => {
   const snapshot = await db.ref('/entries').limitToFirst(10).once('value')
+
   return snapshot.val()
 }
 
@@ -15,16 +17,14 @@ export default function Index() {
   return (
     <>
       <MainHeader />
-      {memes.map((meme, index) => (
-        <Link
-          to={meme.id}
-          state={{ internal: true, memes, current: index }}
-          key={meme.id}
-        >
-          <img src={meme.image} />
-          <hr />
-        </Link>
-      ))}
+      {memes.map((meme, index) => {
+        return (
+          <Link to={meme.id} state={{ internal: true, memes, current: index }} key={meme.id}>
+            <img src={meme.image} />
+            <hr />
+          </Link>
+        )
+      })}
     </>
   )
 }

@@ -1,18 +1,15 @@
-import type {LoaderFunction} from 'remix'
-import {useLoaderData, useLocation, useNavigate} from 'remix'
+import type { LoaderFunction } from 'remix'
+import { useLoaderData, useLocation, useNavigate } from 'remix'
 import invariant from 'tiny-invariant'
 
-import {db} from '~/firebase-service.server'
+import { db } from '~/firebase-service.server'
 
-export const loader: LoaderFunction = async ({params}) => {
+export const loader: LoaderFunction = async ({ params }) => {
   invariant(params.id, 'ID undefined')
   const snapshot = await db.ref(`/entries/${params.id}`).once('value')
 
   return snapshot.val()
 }
-
-
-
 
 interface Meme {
   id: string
@@ -43,7 +40,7 @@ export function Index() {
     if (!nextMeme || !state.current) return navigate('../')
 
     navigate(`../${nextMeme.id}`, {
-      state: {state, current: state.current + 1},
+      state: { state, current: state.current + 1 },
       replace: true
     })
   }

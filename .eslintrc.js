@@ -22,7 +22,13 @@ module.exports = {
   },
   plugins: ['prettier', 'react', '@typescript-eslint', 'simple-import-sort'],
   rules: {
-    'prettier/prettier': [2, require('./prettierrc')],
+    'prettier/prettier': [2, {
+ "semi": false,
+ "tabWidth": 2,
+ "printWidth": 100,
+ "singleQuote": true,
+ "trailingComma": "none"
+}],
     'react/react-in-jsx-scope': 'off',
     'no-unused-vars': 'error',
     'no-console': 'error',
