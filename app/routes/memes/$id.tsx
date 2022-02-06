@@ -1,12 +1,26 @@
-import { useLoaderData, useLocation, useNavigate } from 'remix'
 import type { LoaderFunction } from 'remix'
+import { useLoaderData, useLocation, useNavigate } from 'remix'
+import invariant from 'tiny-invariant'
+
 import { db } from '~/firebase-service.server'
 import styles from '~/styles/meme.css'
 
-export let loader: LoaderFunction = async ({ params }) => {
+export const loader: LoaderFunction = async ({ params }) => {
+  invariant(params.id, 'ID undefined')
   const snapshot = await db.ref(`/entries/${params.id}`).once('value')
 
   return snapshot.val()
+}
+
+interface Meme {
+  id: string
+  image: string
+}
+
+interface State {
+  current?: number
+  memes?: Meme[]
+  internal?: boolean
 }
 
 export function links() {
@@ -16,33 +30,31 @@ export function links() {
 export default function Index() {
   const navigate = useNavigate()
   const location = useLocation()
-  const meme = useLoaderData<{ id: string; image: string }>()
+  const meme = useLoaderData<Meme>()
 
-  const memes = location.state?.memes
-  const currentMemeId = location.state?.current
-  const nextMeme = memes && memes[currentMemeId + 1]
-  const isInternal = location.state?.internal
-
-  console.log(memes, currentMemeId, nextMeme, memes?.length)
+  const state = location.state as State | undefined
+  const memes = state?.memes
+  const currentMemeId = state?.current
+  const nextMeme = memes && currentMemeId !== undefined && memes[currentMemeId + 1]
+  const isInternal = state?.internal
 
   const onGoBack = () => {
-    // TO restore the scroll on previous page if is internal
-    isInternal ? navigate(-1) : navigate('../')
+    return isInternal ? navigate(-1) : navigate('../')
   }
 
   const onGoFoward = () => {
+    if (!nextMeme || !state.current) return navigate('../')
+
     navigate(`../${nextMeme.id}`, {
-      state: { ...location.state, current: location.state?.current + 1 },
-      replace: true,
+      state: { ...state, current: state.current + 1 },
+      replace: true
     })
   }
 
   return (
     <main className="meme">
       <header>
-        <button onClick={onGoBack}>
-          {isInternal ? 'Return to memes' : 'Home'}
-        </button>
+        <button onClick={onGoBack}>{isInternal ? 'Return to memes' : 'Home'}</button>
         {nextMeme && <button onClick={onGoFoward}>Foward</button>}
       </header>
       <div className="memeImg">

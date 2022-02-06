@@ -1,4 +1,5 @@
 import { Outlet } from 'remix'
+
 import styles from '~/styles/memes.css'
 
 export function links() {
