@@ -37,6 +37,7 @@ export default function Index() {
   const currentMemeId = state?.current
   const nextMeme = memes && currentMemeId !== undefined && memes[currentMemeId + 1]
   const isInternal = state?.internal
+
   const onGoBack = () => {
     return isInternal ? navigate(-1) : navigate('../')
   }
@@ -45,7 +46,7 @@ export default function Index() {
     if (!nextMeme || !state.current) return navigate('../')
 
     navigate(`../${nextMeme.id}`, {
-      state: { state, current: state.current + 1 },
+      state: { ...state, current: state.current + 1 },
       replace: true
     })
   }
