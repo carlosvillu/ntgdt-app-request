@@ -52,14 +52,16 @@ export default function Index() {
   }
 
   return (
-    <main className="meme">
+    <>
       <header>
         <button onClick={onGoBack}>{isInternal ? 'Return to memes' : 'Home'}</button>
         {nextMeme && <button onClick={onGoFoward}>Foward</button>}
       </header>
-      <div className="memeImg">
-        <img key={meme.id} src={meme.image} />
-      </div>
-    </main>
+      <main className="meme">
+        <div className="memeImg">
+          <img key={meme.id} src={meme.image} />
+        </div>
+      </main>
+    </>
   )
 }
