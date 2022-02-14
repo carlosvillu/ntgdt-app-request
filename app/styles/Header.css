@@ -5,19 +5,21 @@ header {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  top: 0;
   height: var(--header-height);
-  background: rgba(255, 255, 255, 0.5);
-  padding: 0 15px;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 0 5px;
+  top: 0;
+  position: sticky;
 }
 
 header h1 {
   margin: 0;
   padding: 0;
-  font-size: 30px;
+  font-size: 25px;
   line-height: 1;
   flex-basis: 50%;
   text-align: center;
+  color: white;
 }
 
 header .actions {
@@ -27,14 +29,12 @@ header .actions {
 
 header .back {
   border: none;
-  background: #000;
-  color: white;
-  font-size: 20px;
-  line-height: 30px;
+  background: white;
+  color: black;
   font-weight: bold;
   height: 30px;
   width: 50px;
-  border-radius: 5px;
+  border-radius: 3px;
   padding: 0;
   cursor: pointer;
 }

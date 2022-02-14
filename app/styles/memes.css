@@ -4,8 +4,13 @@ body {
   padding: 0;
 }
 
-body {
-  --header-height: 50px;
+html {
+  --header-height: 40px;
+
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y proximity;
+  scroll-padding: var(--header-height);
 }
 
 * {
@@ -15,8 +20,6 @@ body {
 .page {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
 }
 
 main {
@@ -24,13 +27,6 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: calc(100vh - var(--header-height));
-  height: 100%;
-  overflow-y: scroll;
-  /* The snap only works if the scroll happen inside this element */
-  /* Remix only restore the scroll for the main page */
-  /* Need to implement a custom restore scroll on this element */
-  scroll-snap-type: y mandatory;
 }
 
 .meme-item {

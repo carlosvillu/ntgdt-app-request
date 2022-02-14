@@ -12,7 +12,7 @@ export const MainHeader = ({ onGoBack }: MainHeaderProps) => {
           </button>
         )}
       </div>
-      <h1 className="text-3xl font-bold">NTGDT</h1>
+      <h1 className="text-2xl font-bold">NTGDT</h1>
       <div className="actions" />
     </header>
   )
