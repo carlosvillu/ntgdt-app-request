@@ -1,7 +1,10 @@
+/* eslint-disable no-console */
 import type { LoaderFunction } from 'remix'
-import { Link, useLoaderData } from 'remix'
+import { useLoaderData } from 'remix'
 
 import { MainHeader } from '~/components/Header'
+import type { Meme } from '~/components/MemeItem'
+import { MemeItem } from '~/components/MemeItem'
 import { db } from '~/firebase-service.server'
 
 export const loader: LoaderFunction = async () => {
@@ -11,7 +14,7 @@ export const loader: LoaderFunction = async () => {
 }
 
 export default function Index() {
-  const data = useLoaderData<Record<string, { id: string; image: string }>>()
+  const data = useLoaderData<Record<string, Meme>>()
   const memes = Object.values(data)
 
   return (
@@ -19,13 +22,9 @@ export default function Index() {
       <MainHeader />
 
       <main>
-        {memes.map((meme) => {
-          return (
-            <Link to={meme.id} state={{ internal: true }} key={meme.id} className="meme-item">
-              <img src={meme.image} />
-            </Link>
-          )
-        })}
+        {memes.map((meme) => (
+          <MemeItem meme={meme} linkTo={meme.id} key={meme.id} />
+        ))}
       </main>
     </>
   )

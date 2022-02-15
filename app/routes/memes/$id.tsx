@@ -3,17 +3,14 @@ import { useLoaderData, useLocation, useNavigate } from 'remix'
 import invariant from 'tiny-invariant'
 
 import { MainHeader } from '~/components/Header'
+import type { Meme } from '~/components/MemeItem'
+import { MemeItem } from '~/components/MemeItem'
 import { db } from '~/firebase-service.server'
 import styles from '~/styles/meme.css'
 
-interface Meme {
-  id: string
-  image: string
-}
-
 interface Data {
   currentMeme: Meme
-  relatedMemes: Record<string, { id: string; image: string }>
+  relatedMemes: Record<string, Meme>
 }
 
 interface State {
@@ -60,13 +57,9 @@ export default function Index() {
           <img key={currentMeme.id} src={currentMeme.image} />
         </div>
 
-        {Object.values(relatedMemes).map((meme) => {
-          return (
-            <div key={meme.id} className="meme-item">
-              <img src={meme.image} />
-            </div>
-          )
-        })}
+        {Object.values(relatedMemes).map((meme) => (
+          <MemeItem meme={meme} key={meme.id} />
+        ))}
       </main>
     </>
   )
