@@ -25,7 +25,6 @@ export function useProgress(): MutableRefObject<HTMLElement> {
 
         el.current.style.width = `${percent}%`
 
-        console.log(percent)
         updateWidth(100)
       }, ms)
     }
@@ -58,12 +57,7 @@ function PageProgress(): ReactElement {
   const progress = useProgress()
 
   return (
-    <div
-      className="fixed top-0 left-0 right-0 h-1 flex"
-      style={{
-        'z-index': '9999'
-      }}
-    >
+    <div className="fixed top-0 left-0 right-0 h-1 flex z-12">
       <div
         ref={progress}
         className="transition-all ease-out bg-gradient-to-r from-green-400 via-blue-500 to-pink-500"

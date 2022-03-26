@@ -13,7 +13,7 @@ header {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
-header h1 {
+header .logo {
   margin: 0;
   padding: 0;
   font-size: 25px;
@@ -30,7 +30,7 @@ header .actions {
 
 header .back {
   border: none;
-  background: white;
+  background: rgba(255, 255, 255, 0.7);
   color: black;
   font-weight: bold;
   height: 30px;
@@ -38,4 +38,9 @@ header .back {
   border-radius: 3px;
   padding: 0;
   cursor: pointer;
+}
+
+header .back:hover,
+header .back:active {
+  background: white;
 }

@@ -1,3 +1,5 @@
+import fontAwesome from '@fortawesome/fontawesome-free/css/fontawesome.css'
+import fontAwesomeSolid from '@fortawesome/fontawesome-free/css/solid.css'
 import type { LoaderFunction } from 'remix'
 import { useLoaderData, useLocation, useNavigate } from 'remix'
 import invariant from 'tiny-invariant'
@@ -22,7 +24,7 @@ interface State {
 export const loader: LoaderFunction = async ({ params }) => {
   invariant(params.id, 'ID undefined')
 
-  const MAX_ITEMS = 10
+  const MAX_ITEMS = 20
   const ref = '/entries'
   const currentMeme = await db.ref(`/entries/${params.id}`).once('value')
   const currentSite = currentMeme.val().site
@@ -45,7 +47,11 @@ export const loader: LoaderFunction = async ({ params }) => {
 }
 
 export function links() {
-  return [{ rel: 'stylesheet', href: styles }]
+  return [
+    { rel: 'stylesheet', href: styles },
+    { rel: 'stylesheet', href: fontAwesome },
+    { rel: 'stylesheet', href: fontAwesomeSolid }
+  ]
 }
 
 export default function Index() {
@@ -66,15 +72,7 @@ export default function Index() {
       <MainHeader onGoBack={onGoBack} />
 
       <main>
-        <div className="meme-item">
-          <img key={currentMeme.id} src={currentMeme.image} />
-
-          <div className="meme-item__site">
-            <a href={currentMeme.link} rel="noopener noreferrer" target="_blank">
-              {currentMeme.site} 
-            </a>
-          </div>
-        </div>
+        <MemeItem meme={currentMeme} />
 
         {Object.values(relatedMemes).map((meme) => (
           <MemeItem meme={meme} key={meme.id} />

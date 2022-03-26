@@ -1,7 +1,7 @@
 import { Link } from 'remix'
 
 export interface Meme {
-  createdAt: string
+  createdAt: number
   id: string
   image: string
   image_blur: string
@@ -9,7 +9,7 @@ export interface Meme {
   site?: string
   title?: string
   height: number
-  width: string
+  width: number
 }
 
 interface MemeItemProps {
@@ -28,16 +28,31 @@ export const MemeItem = ({ linkTo, meme }: MemeItemProps) => {
 
       {linkTo ? (
         <Link to={linkTo} state={{ internal: true }}>
-          <img src={meme.image} className="meme-item__image" />
+          <div
+            style={{
+              backgroundImage: `url(${meme.image_blur})`,
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat'
+            }}
+          >
+            <img
+              src={meme.image}
+              className="meme-item__image"
+              height={meme.height}
+              width={meme.width}
+              loading="lazy"
+            />
+          </div>
         </Link>
       ) : (
         <img src={meme.image} className="meme-item__image" />
       )}
 
       {meme.site && meme.link && (
-        <div className="meme-item__site">
-          <a href={meme.link} rel="noopener noreferrer" target="_blank">
-            {meme.site} 
+        <div className="meme-item__footer">
+          <span className="meme-item__date">{new Date(meme.createdAt).toLocaleDateString()}</span>
+          <a href={meme.link} rel="noopener noreferrer" target="_blank" className="meme-item__site">
+            {meme.site} <i className="fa-solid fa-square-arrow-up-right"></i>
           </a>
         </div>
       )}

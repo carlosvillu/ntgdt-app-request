@@ -10,7 +10,9 @@ import { MemeItem } from '~/components/MemeItem'
 import { db } from '~/firebase-service.server'
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const MAX_ITEMS = 10
+  const sortByDate = (a: Meme, b: Meme) => Number(b.createdAt) - Number(a.createdAt)
+
+  const MAX_ITEMS = 20
   const ref = '/entries'
 
   const url = new URL(request.url)
@@ -22,20 +24,20 @@ export const loader: LoaderFunction = async ({ request }) => {
     snapshot = await db
       .ref(ref)
       .orderByChild('createdAt')
-      .startAfter(Number(lastMemeDate))
+      .endBefore(Number(lastMemeDate))
       .limitToLast(MAX_ITEMS)
       .get()
   } else {
-    snapshot = await db.ref(ref).orderByChild('createdAt').limitToFirst(MAX_ITEMS).get()
+    snapshot = await db.ref(ref).orderByChild('createdAt').limitToLast(MAX_ITEMS).get()
   }
 
-  return snapshot.val()
+  return (Object.values(snapshot.val()) as Meme[]).sort(sortByDate)
 }
 
 export default function Index() {
-  const data = useLoaderData<Record<string, Meme>>()
-  const fetcher = useFetcher<Record<string, Meme>>()
-  const [memes, setMemes] = useState(Object.values(data))
+  const data = useLoaderData<Meme[]>()
+  const fetcher = useFetcher<Meme[]>()
+  const [memes, setMemes] = useState(data)
 
   useEffect(() => {
     if (fetcher.data) {

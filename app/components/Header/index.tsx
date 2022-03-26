@@ -1,3 +1,5 @@
+import { Link } from 'remix'
+
 interface MainHeaderProps {
   onGoBack?: () => void
 }
@@ -8,11 +10,15 @@ export const MainHeader = ({ onGoBack }: MainHeaderProps) => {
       <div className="actions">
         {onGoBack && (
           <button onClick={onGoBack} className="back">
-            &#8592;
+            <i className="fa-solid fa-arrow-left" />
           </button>
         )}
       </div>
-      <h1 className="text-2xl font-bold">NTGDT</h1>
+
+      <Link to="/" className="logo">
+        <h1 className="text-2xl font-bold">NTGDT</h1>
+      </Link>
+
       <div className="actions" />
     </header>
   )
