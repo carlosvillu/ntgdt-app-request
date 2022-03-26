@@ -4,7 +4,7 @@ interface MainHeaderProps {
 
 export const MainHeader = ({ onGoBack }: MainHeaderProps) => {
   return (
-    <header>
+    <header className="z-10">
       <div className="actions">
         {onGoBack && (
           <button onClick={onGoBack} className="back">

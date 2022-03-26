@@ -20,7 +20,7 @@ html {
 .page {
   display: flex;
   flex-direction: column;
-  background: #fafafa;
+  background: #1d1d1d;
 }
 
 main {
@@ -34,7 +34,7 @@ main {
   width: 100%;
   max-width: 400px;
   margin: 10px 0px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0px 1px rgba(255, 255, 255, 0.5);
   display: flex;
   flex-direction: column;
   scroll-snap-align: start;
@@ -54,11 +54,11 @@ main {
 }
 
 .meme-item__title {
-  margin: 12px 8px;
+  margin: 9px 15px;
 }
 
 .meme-item__site {
-  margin: 8px;
+  margin: 9px 15px;
   display: flex;
   justify-content: flex-end;
 }
