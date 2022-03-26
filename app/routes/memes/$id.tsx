@@ -21,9 +21,22 @@ interface State {
 
 export const loader: LoaderFunction = async ({ params }) => {
   invariant(params.id, 'ID undefined')
+
+  const MAX_ITEMS = 10
+  const ref = '/entries'
   const currentMeme = await db.ref(`/entries/${params.id}`).once('value')
-  // TODO: get related memes, maybe using same meme provider
-  const relatedMemes = await db.ref('/entries').limitToLast(10).once('value')
+  const currentSite = currentMeme.val().site
+
+  // Get related memes using currentSite
+  // Seems for a real filter needs a document instead a reference
+  // TODO add pagination. Can order by site and createdAt?
+  const relatedMemes = await db
+    .ref(ref)
+    .orderByChild('site')
+    .equalTo(currentSite)
+    .limitToLast(MAX_ITEMS)
+    .once('value')
+  // .get() // index not defined
 
   return {
     currentMeme: currentMeme.val(),
@@ -55,6 +68,12 @@ export default function Index() {
       <main>
         <div className="meme-item">
           <img key={currentMeme.id} src={currentMeme.image} />
+
+          <div className="meme-item__site">
+            <a href={currentMeme.link} rel="noopener noreferrer" target="_blank">
+              {currentMeme.site} 
+            </a>
+          </div>
         </div>
 
         {Object.values(relatedMemes).map((meme) => (

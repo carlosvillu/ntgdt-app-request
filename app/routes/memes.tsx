@@ -1,5 +1,6 @@
 import { Outlet } from 'remix'
 
+import PageProgress from '~/components/PageProgress/PageProgress'
 import headerStyles from '~/styles/Header.css'
 import styles from '~/styles/memes.css'
 
@@ -13,6 +14,8 @@ export function links() {
 export default function Index() {
   return (
     <section className="page">
+      <PageProgress />
+
       <Outlet />
     </section>
   )
