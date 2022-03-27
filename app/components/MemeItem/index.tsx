@@ -1,4 +1,4 @@
-import { Link } from 'remix'
+import { useNavigate } from 'remix'
 
 export interface Meme {
   createdAt: number
@@ -13,11 +13,22 @@ export interface Meme {
 }
 
 interface MemeItemProps {
-  linkTo?: string
+  detailLink?: {
+    linkTo: string
+    state: { memes: Meme[] }
+  }
   meme: Meme
 }
 
-export const MemeItem = ({ linkTo, meme }: MemeItemProps) => {
+export const MemeItem = ({ detailLink, meme }: MemeItemProps) => {
+  const navigate = useNavigate()
+
+  const onClickMeme = () => {
+    const position = window.scrollY
+
+    detailLink && navigate(detailLink?.linkTo, { state: { ...detailLink.state, position } })
+  }
+
   return (
     <div className="meme-item" key={meme.id}>
       {meme.title && (
@@ -26,24 +37,24 @@ export const MemeItem = ({ linkTo, meme }: MemeItemProps) => {
         </div>
       )}
 
-      {linkTo ? (
-        <Link to={linkTo} state={{ internal: true }}>
-          <div
-            style={{
-              backgroundImage: `url(${meme.image_blur})`,
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat'
-            }}
-          >
-            <img
-              src={meme.image}
-              className="meme-item__image"
-              height={meme.height}
-              width={meme.width}
-              loading="lazy"
-            />
-          </div>
-        </Link>
+      {detailLink ? (
+        <div
+          onClick={onClickMeme}
+          style={{
+            backgroundImage: `url(${meme.image_blur})`,
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            cursor: 'pointer'
+          }}
+        >
+          <img
+            src={meme.image}
+            className="meme-item__image"
+            height={meme.height}
+            width={meme.width}
+            loading="lazy"
+          />
+        </div>
       ) : (
         <img src={meme.image} className="meme-item__image" />
       )}

@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { useEffect, useState } from 'react'
 import type { LoaderFunction } from 'remix'
+import { useLocation } from 'remix'
 import { useFetcher } from 'remix'
 import { useLoaderData } from 'remix'
 
@@ -35,10 +36,20 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 export default function Index() {
+  const location = useLocation()
   const data = useLoaderData<Meme[]>()
   const fetcher = useFetcher<Meme[]>()
-  const [memes, setMemes] = useState(data)
+  const locationState = location?.state as { memes: Meme[]; position: number } | undefined
+  const [memes, setMemes] = useState(locationState?.memes ?? data)
 
+  // Restore scroll on load page
+  useEffect(() => {
+    if (locationState) {
+      window.scroll({ top: locationState.position })
+    }
+  }, [locationState])
+
+  // Update state on read more
   useEffect(() => {
     if (fetcher.data) {
       const newMemes = Object.values(fetcher.data)
@@ -60,7 +71,7 @@ export default function Index() {
 
       <main>
         {memes.map((meme) => (
-          <MemeItem meme={meme} linkTo={meme.id} key={meme.id} />
+          <MemeItem meme={meme} detailLink={{ linkTo: meme.id, state: { memes } }} key={meme.id} />
         ))}
 
         <button className="load-more" onClick={onLoadMore} disabled={isLoadingMore}>

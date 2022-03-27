@@ -1,5 +1,7 @@
+/* eslint-disable no-console */
 import fontAwesome from '@fortawesome/fontawesome-free/css/fontawesome.css'
 import fontAwesomeSolid from '@fortawesome/fontawesome-free/css/solid.css'
+import { useEffect } from 'react'
 import type { LoaderFunction } from 'remix'
 import { useLoaderData, useLocation, useNavigate } from 'remix'
 import invariant from 'tiny-invariant'
@@ -13,12 +15,6 @@ import styles from '~/styles/meme.css'
 interface Data {
   currentMeme: Meme
   relatedMemes: Record<string, Meme>
-}
-
-interface State {
-  current?: number
-  memes?: Meme[]
-  internal?: boolean
 }
 
 export const loader: LoaderFunction = async ({ params }) => {
@@ -59,13 +55,19 @@ export default function Index() {
   const location = useLocation()
   const data = useLoaderData<Data>()
   const { currentMeme, relatedMemes } = data
-
-  const state = location.state as State | undefined
-  const isInternal = state?.internal
+  const state = location.state as Meme[] | undefined
 
   const onGoBack = () => {
-    return isInternal ? navigate(-1) : navigate('../')
+    return navigate('../', { state })
   }
+
+  // Custom browser go-back action (for send the state to main page)
+  useEffect(() => {
+    window.onpopstate = function (e) {
+      e.preventDefault()
+      onGoBack()
+    }
+  }, [onGoBack])
 
   return (
     <>
