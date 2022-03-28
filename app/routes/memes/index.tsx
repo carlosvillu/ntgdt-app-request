@@ -69,13 +69,18 @@ export default function Index() {
     <>
       <MainHeader />
 
-      <main>
+      <main className="w-full flex flex-col items-center">
         {memes.map((meme) => (
           <MemeItem meme={meme} detailLink={{ linkTo: meme.id, state: { memes } }} key={meme.id} />
         ))}
 
-        <button className="load-more" onClick={onLoadMore} disabled={isLoadingMore}>
-          {isLoadingMore ? 'Loading...' : 'More'}
+        <button
+          className="text-white py-3 px-8 my-4 bg-gray-900 text-base rounded-full disabled:opacity-50"
+          style={{ marginBottom: '40vh' }}
+          onClick={onLoadMore}
+          disabled={isLoadingMore}
+        >
+          {isLoadingMore ? 'Loading...' : 'MORE'}
         </button>
       </main>
     </>

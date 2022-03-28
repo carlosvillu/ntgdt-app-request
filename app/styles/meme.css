@@ -1,9 +1,0 @@
-.meme {
-  display: flex;
-  flex-direction: column;
-}
-
-.meme img {
-  width: 100%;
-  height: auto;
-}

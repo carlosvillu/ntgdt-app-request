@@ -1,6 +1,4 @@
 /* eslint-disable no-console */
-import fontAwesome from '@fortawesome/fontawesome-free/css/fontawesome.css'
-import fontAwesomeSolid from '@fortawesome/fontawesome-free/css/solid.css'
 import { useEffect } from 'react'
 import type { LoaderFunction } from 'remix'
 import { useLoaderData, useLocation, useNavigate } from 'remix'
@@ -10,7 +8,6 @@ import { MainHeader } from '~/components/Header'
 import type { Meme } from '~/components/MemeItem'
 import { MemeItem } from '~/components/MemeItem'
 import { db } from '~/firebase-service.server'
-import styles from '~/styles/meme.css'
 
 interface Data {
   currentMeme: Meme
@@ -42,14 +39,6 @@ export const loader: LoaderFunction = async ({ params }) => {
   }
 }
 
-export function links() {
-  return [
-    { rel: 'stylesheet', href: styles },
-    { rel: 'stylesheet', href: fontAwesome },
-    { rel: 'stylesheet', href: fontAwesomeSolid }
-  ]
-}
-
 export default function Index() {
   const navigate = useNavigate()
   const location = useLocation()
@@ -73,7 +62,7 @@ export default function Index() {
     <>
       <MainHeader onGoBack={onGoBack} />
 
-      <main>
+      <main className="w-full flex flex-col items-center">
         <MemeItem meme={currentMeme} />
 
         {Object.values(relatedMemes).map((meme) => (

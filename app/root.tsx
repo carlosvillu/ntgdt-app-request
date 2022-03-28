@@ -1,14 +1,22 @@
+import fontAwesome from '@fortawesome/fontawesome-free/css/fontawesome.css'
+import fontAwesomeSolid from '@fortawesome/fontawesome-free/css/solid.css'
 import type { MetaFunction } from 'remix'
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from 'remix'
 
-import styles from './styles/app.css'
+import tailwindcss from './styles/tailwindcss.css'
+import vars from './styles/vars.css'
 
 export const meta: MetaFunction = () => {
-  return { title: 'New Remix App' }
+  return { title: 'No Tengo Ganas De Trabajar' }
 }
 
 export function links() {
-  return [{ rel: 'stylesheet', href: styles }]
+  return [
+    { rel: 'stylesheet', href: vars },
+    { rel: 'stylesheet', href: tailwindcss },
+    { rel: 'stylesheet', href: fontAwesome },
+    { rel: 'stylesheet', href: fontAwesomeSolid }
+  ]
 }
 
 export default function App() {
